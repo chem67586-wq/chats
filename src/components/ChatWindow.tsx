@@ -3,6 +3,7 @@ import { Send } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { Message, Profile } from '../types';
 import { useAuth } from '../contexts/AuthContext';
+import { getAnonymousName, getAnonymousInitial } from '../utils/anonymize';
 
 interface ChatWindowProps {
   selectedUser: Profile;
@@ -124,13 +125,13 @@ export function ChatWindow({ selectedUser }: ChatWindowProps) {
     <div className="flex flex-col h-full bg-gray-50">
       <div className="bg-white border-b border-gray-200 p-4 flex items-center gap-3">
         <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-semibold">
-          {selectedUser.display_name?.[0]?.toUpperCase() || selectedUser.email[0].toUpperCase()}
+          {getAnonymousInitial(selectedUser.id)}
         </div>
         <div>
           <h3 className="font-semibold text-gray-800">
-            {selectedUser.display_name || selectedUser.email}
+            {getAnonymousName(selectedUser.id)}
           </h3>
-          <p className="text-xs text-gray-500">{selectedUser.email}</p>
+          <p className="text-xs text-gray-500">Anonymous User</p>
         </div>
       </div>
 
