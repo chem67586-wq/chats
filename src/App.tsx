@@ -1,6 +1,7 @@
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { Login } from './components/Login';
 import { Chat } from './components/Chat';
+import { InstallPrompt } from './components/InstallPrompt';
 
 function AppContent() {
   const { user, loading } = useAuth();
@@ -23,6 +24,7 @@ function App() {
   return (
     <AuthProvider>
       <AppContent />
+      <InstallPrompt />
     </AuthProvider>
   );
 }
