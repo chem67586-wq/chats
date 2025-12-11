@@ -3,6 +3,7 @@ import { LogOut, Search } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { ChatUser, Profile } from '../types';
 import { useAuth } from '../contexts/AuthContext';
+import { getAnonymousName, getAnonymousInitial } from '../utils/anonymize';
 
 interface UserListProps {
   selectedUserId: string | null;
@@ -72,8 +73,7 @@ export function UserList({ selectedUserId, onSelectUser }: UserListProps) {
   };
 
   const filteredUsers = users.filter((user) =>
-    user.display_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    user.email.toLowerCase().includes(searchTerm.toLowerCase())
+    getAnonymousName(user.id).toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -82,7 +82,7 @@ export function UserList({ selectedUserId, onSelectUser }: UserListProps) {
         <div className="flex items-center justify-between mb-4">
           <div>
             <h2 className="text-xl font-bold text-gray-800">Messages</h2>
-            <p className="text-sm text-gray-500">{profile?.display_name}</p>
+            <p className="text-sm text-gray-500">{profile ? getAnonymousName(profile.id) : ''}</p>
           </div>
           <button
             onClick={signOut}
@@ -120,13 +120,13 @@ export function UserList({ selectedUserId, onSelectUser }: UserListProps) {
               }`}
             >
               <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-semibold flex-shrink-0">
-                {user.display_name?.[0]?.toUpperCase() || user.email[0].toUpperCase()}
+                {getAnonymousInitial(user.id)}
               </div>
 
               <div className="flex-1 min-w-0 text-left">
                 <div className="flex items-center justify-between mb-1">
                   <h3 className="font-semibold text-gray-800 truncate">
-                    {user.display_name || user.email}
+                    {getAnonymousName(user.id)}
                   </h3>
                   {user.unreadCount! > 0 && (
                     <span className="bg-blue-600 text-white text-xs font-bold rounded-full px-2 py-1 min-w-[20px] text-center">
